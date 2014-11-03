@@ -1,0 +1,15 @@
+{
+  "name": "gulp-svg-sprite",
+  "description": "Gulp SVG sprite generator",
+  "repository": "https://github.com/iamdarrenhall/gulp-svg-sprite",
+  "version": "0.0.1",
+  "devDependencies": {
+    "gulp": "^3.8.9"
+  },
+  "dependencies": {
+    "cheerio": "^0.17.0",
+    "gulp-util": "^3.0.1",
+    "mustache": "^0.8.2",
+    "through2": "^0.6.3"
+  }
+}
