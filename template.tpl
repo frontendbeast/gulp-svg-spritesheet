@@ -17,7 +17,7 @@
 .sprite__{{fileName}}:before {
     @extend %sprite;
     background-position: {{x}}{{units}} {{y}}{{units}};
-    width: {{width}}{{units}};
-    height: {{height}}{{units}};
+    width: {{w}}{{units}};
+    height: {{h}}{{units}};
 }
 {{/sprites}}

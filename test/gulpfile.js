@@ -1,16 +1,25 @@
 var gulp = require('gulp'),
-	svgmin = require('gulp-svgmin'),
-	svgsprite = require('../index');
+    jshint = require('gulp-jshint'),
+    svgmin = require('gulp-svgmin'),
+    svgsprite = require('../index');
 
 gulp.task('default', function () {
-	gulp.src('icons/*.svg')
+    gulp.src('svgs/*.svg')
     .pipe(svgsprite({
-    	cssPathNoSvg: './test.png',
-    	demoDest: './demo.html',
-    	padding: 0,
-    	positioning: 'packed',
-    	units: 'em'
+        cssPathNoSvg: './test.png',
+        demoDest: './demo.html',
+        padding: 0,
+        positioning: 'packed',
+        units: 'em'
     }))
     .pipe(svgmin())
     .pipe(gulp.dest('test.svg'));
-})
+});
+
+gulp.task('jshint', function() {
+    gulp.src('../index.js')
+        .pipe(jshint({
+            'node': true
+        }))
+        .pipe(jshint.reporter('default'));
+});
