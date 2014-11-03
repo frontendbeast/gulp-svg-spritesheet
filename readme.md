@@ -1,4 +1,4 @@
-#gulp-svg-sprite
+#gulp-svg-spritesheet
 A [gulp.js](http://gulpjs.com/) plugin to generate an SVG sprite sheet. 
 
 Unlike other node SVG plugins, this does not require Windows users to install Python or Visual Studio C++. 
