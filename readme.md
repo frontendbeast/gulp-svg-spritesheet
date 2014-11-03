@@ -48,43 +48,45 @@ gulp.task('default', function () {
 
 ##Options
 
-###cssPathNoSvg
+####cssPathNoSvg
+
 Type: `string` 
 Default: `<empty>` 
 
 Optional. CSS `background-image` path for the non-SVG fallback image, which will be output in the `templateDest` file. The path should be relative to that final destination file. The mustache template can ignore an empty value. To generate a fallback image you must use a plugin of your choice (e.g. gulp-svg2png) and pipe in the SVG as per the complex example above.
 
-###cssPathSvg
+####cssPathSvg
+
 Type: `string` 
 Default: `./test.svg` 
 
 CSS `background-image` path which will be used in the `templateDest` file. The path should be relative to that final destination file.
 
-###demoDest
+####demoDest
 Type: `string` 
 Default: `<empty>` 
 
 Optional. A demo file can be created showing all of the SVGs within the spritesheet. A sample is provided in the `test` folder and can be customised however you like. If you do not require a demo file then leave this option empty.
 
-###demoSrc
+####demoSrc
 Type: `string` 
 Default: `../demo.tpl` 
 
 Optional. The source mustache template file used to create the `demoDest` file. Only used when `demoDest` is not empty.
 
-###padding
+####padding
 Type: `integer` 
 Default: `0` 
 
 Add padding around the individual sprites. Value is pixel based.
 
-###pixelBase
+####pixelBase
 Type: `integer` 
 Default: `16` 
 
 Optional. Used if anything other than `px` is specified in `units` to calculate relative units. 
 
-###positioning
+####positioning
 Type: `integer` 
 Default: `vertical` 
 
@@ -95,31 +97,31 @@ Allows icons to be layed out in one of several ways:
  * `diagonal` – cascading from top left to bottom right
  * `packed` – like Compass' smart layout option
 
-###templateDest
+####templateDest
 Type: `string` 
 Default: `./sprite.scss` 
 
 The destination of the sprite sheet CSS generated from `templateSrc`. 
 
-###templateSrc
+####templateSrc
 Type: `string` 
 Default: `./template.tpl` 
 
 A mustache template file used to output the sprite sheet CSS.
 
-###units
+####units
 Type: `string` 
 Default: `px` 
 
 CSS background size and position units of measurement. If a value other than `px` is specified (`em` or `rem`) then pixel values will be converted to relative units using `pixelBase`.
 
-###x
+####x
 Type: `integer` 
 Default: `0` 
 
 Offset the starting X position on the sprite sheet.
 
-###y
+####y
 Type: `integer` 
 Default: `0` 
 
