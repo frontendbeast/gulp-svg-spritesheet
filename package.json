@@ -1,13 +1,36 @@
 {
-  "name": "gulp-svg-sprite",
-  "description": "Gulp SVG sprite generator",
-  "repository": "https://github.com/iamdarrenhall/gulp-svg-sprite",
+  "name": "gulp-svg-spritesheet",
+  "description": "Gulp SVG sprite sheet generator",
   "version": "0.0.2",
+  "author": "Darren Hall <hello@darrenhall.info>",
+  "license": "MIT",
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iamdarrenhall/gulp-svg-spritesheet.git"
+  },
+
+  "homepage": "https://github.com/iamdarrenhall/gulp-svg-spritesheet",
+  "bugs": {
+    "url": "https://github.com/iamdarrenhall/gulp-svg-spritesheet/issues"
+  },
+
+  "keywords": [
+    "gulpplugin",
+    "sprite",
+    "svg"
+  ],
+
+  "engines": {
+    "node": ">=0.10.28"
+  },
+
   "devDependencies": {
     "gulp": "^3.8.9",
     "gulp-jshint": "^1.9.0",
     "gulp-svgmin": "^0.4.7"
   },
+
   "dependencies": {
     "cheerio": "^0.17.0",
     "gulp-util": "^3.0.1",
