@@ -128,7 +128,7 @@ Default: `0`
 Offset the starting X position on the sprite sheet.
 
 ##Disclaimer
-This is my first gulp plugin, so it might be complete rubbish. It's very alpha right now, and as such may not work. If you spot any bugs, or areas for improvement then feel free to fork yourself and send me a pull request!
+This is my first gulp plugin, so it might be complete rubbish. It's very alpha right now, and as such may not work. If you spot any bugs, or areas for improvement then feel free to go fork yourself and send me a pull request!
 
 ##Thanks
 @shakyShane and his [gulp-svg-sprites](https://github.com/shakyShane/gulp-svg-sprites) plugin, which I was using before I need it to run without a Python dependancy.
