@@ -28,7 +28,8 @@ var defaults = {
     y: 0 // Starting Y position
 };
 
-// Sorting functions from 
+// Sorting functions from Jake Gordon's bin packing algorithm demo
+// https://github.com/jakesgordon/bin-packing
 var sort = {
     w       : function (a,b) { return b.w - a.w; },
     h       : function (a,b) { return b.h - a.h; },
@@ -44,12 +45,12 @@ var sort = {
       var diff, n;
       for (n = 0 ; n < criteria.length ; n++) {
         diff = sort[criteria[n]](a,b);
-        if (diff != 0)
+        if (diff !== 0)
           return diff;  
       }
       return 0;
     }
-}
+};
 
 
 // This is where the magic happens

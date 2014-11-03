@@ -4,7 +4,9 @@
   "repository": "https://github.com/iamdarrenhall/gulp-svg-sprite",
   "version": "0.0.1",
   "devDependencies": {
-    "gulp": "^3.8.9"
+    "gulp": "^3.8.9",
+    "gulp-jshint": "^1.9.0",
+    "gulp-svgmin": "^0.4.7"
   },
   "dependencies": {
     "cheerio": "^0.17.0",
