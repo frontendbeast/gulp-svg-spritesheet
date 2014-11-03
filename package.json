@@ -2,7 +2,7 @@
   "name": "gulp-svg-sprite",
   "description": "Gulp SVG sprite generator",
   "repository": "https://github.com/iamdarrenhall/gulp-svg-sprite",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "devDependencies": {
     "gulp": "^3.8.9",
     "gulp-jshint": "^1.9.0",
