@@ -1,11 +1,11 @@
 var gulp = require('gulp'),
     jshint = require('gulp-jshint'),
     svgmin = require('gulp-svgmin'),
-    svgsprite = require('../index');
+    svgspritesheet = require('../index');
 
 gulp.task('default', function () {
     gulp.src('svgs/*.svg')
-    .pipe(svgsprite({
+    .pipe(svgspritesheet({
         cssPathNoSvg: './test.png',
         demoDest: './demo.html',
         padding: 0,

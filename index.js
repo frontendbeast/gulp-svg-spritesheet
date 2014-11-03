@@ -10,7 +10,7 @@ var cheerio = require('cheerio'),
     through2 = require('through2');
 
 // Consts
-var PLUGIN_NAME = 'gulp-svg-sprite';
+var PLUGIN_NAME = 'gulp-svg-spritesheet';
 
 // Options
 var defaults = {

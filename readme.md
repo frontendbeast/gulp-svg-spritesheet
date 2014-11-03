@@ -1,4 +1,4 @@
-#gulp-svg-sprite
+#gulp-svg-spritesheet
 A [gulp.js](http://gulpjs.com/) plugin to generate an SVG sprite sheet. 
 
 Unlike other node SVG plugins, this does not require Windows users to install Python or Visual Studio C++. 
@@ -15,7 +15,7 @@ In it's simplest form, all you need to define is the source mustache formatted t
 ```
 gulp.task('default', function () {
     gulp.src('svgs/*.svg')
-    .pipe(svgsprite({
+    .pipe(svgspritesheet({
         cssPathSvg: 'images/sprite.svg'
         templateSrc: 'sass.tpl',
         templateDest: 'sass/sprite.scss'
@@ -29,7 +29,7 @@ You can also specify a no-SVG fallback image path, add padding, use relative uni
 ```
 gulp.task('default', function () {
     gulp.src('svgs/*.svg')
-    .pipe(svgsprite({
+    .pipe(svgspritesheet({
         cssPathNoSvg: 'images/sprite.png'
         cssPathSvg: 'images/sprite.svg'
         padding: 10,
