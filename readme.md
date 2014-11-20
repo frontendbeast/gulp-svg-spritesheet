@@ -20,7 +20,10 @@ gulp.task('default', function () {
         templateSrc: 'sass.tpl',
         templateDest: 'sass/sprite.scss'
     }))
-    .pipe(gulp.dest('images/sprite.svg'));
+    .pipe(gulp.dest('images'));
+    // this will write the following files
+    //      images/sprite.scss
+    //      images/sprint.svg
 });
 ```
 
@@ -35,6 +38,7 @@ gulp.task('default', function () {
         padding: 10,
         pixelBase: 16,
         positioning: 'diagonal',
+        svgDest: './sprinte.svg',
         templateSrc: 'sass.tpl',
         templateDest: 'sass/sprite.scss',
         units: 'em'
@@ -61,6 +65,12 @@ Type: `string`
 Default: `./test.svg` 
 
 CSS `background-image` path which will be used in the `templateDest` file. The path should be relative to that final destination file.
+
+####svgDest
+Type: `string`
+Default: `./sprite.svg`
+
+The destination of the generated .svg file. If relative path is used, it will be set to `path.resolve('./some/relative/path.svg')`.
 
 ####demoDest
 Type: `string` 

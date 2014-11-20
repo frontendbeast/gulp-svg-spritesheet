@@ -1,7 +1,6 @@
 'use strict';
 
 var cheerio = require('cheerio'),
-    events = require('events'),
     fs = require('fs'),
     gutil = require('gulp-util'),
     mustache = require('mustache'),
@@ -16,13 +15,14 @@ var PLUGIN_NAME = 'gulp-svg-spritesheet';
 var defaults = {
     cssPathNoSvg: '', // Leave blank if you dont want to specify a fallback
     cssPathSvg: './test.svg', // CSS path to generated SVG
-    demoDest: '', // Leave blank if you don't want a demo file
-    demoSrc: '../demo.tpl', // The souce or the demo template
+    demoDest: './sprite.html', // Leave blank if you don't want a demo file
+    demoSrc: path.resolve(__dirname, 'demo.tpl'), // The souce or the demo template
     padding: 0, // Add some padding between sprites
     pixelBase: 16, // Used to calculate em/rem values
     positioning: 'vertical', // vertical, horizontal, diagonal or packed
-    templateSrc: '../template.tpl', // The source of the CSS template
-    templateDest: './sprite.scss', 
+    templateSrc: path.resolve(__dirname, 'template.tpl'), // The source of the CSS template
+    templateDest: './sprite.scss',
+    svgDest: './sprite.svg',
     units: 'px', // px, em or rem
     x: 0, // Starting X position
     y: 0 // Starting Y position
@@ -55,7 +55,7 @@ var sort = {
 
 // This is where the magic happens
 var spriteSVG = function(options) {
-    
+
     options = options || {};
 
     // Extend our defaults with any passed options
@@ -74,13 +74,8 @@ var spriteSVG = function(options) {
             units: options.units,
             width: 0
         },
-        eventEmitter = new events.EventEmitter(),
-        self,
         x = options.x,
         y = options.y;
-
-    // When a template file is loaded, render it
-    eventEmitter.on("loadedTemplate", renderTemplate);
 
     // Generate relative em/rem untis from pixels
     function pxToRelative(value) {
@@ -89,30 +84,33 @@ var spriteSVG = function(options) {
 
     // Load a template file and then render it
     function loadTemplate(src, dest) {
-        fs.readFile(src, function(err, contents) {
-            if(err) {
-                new gutil.PluginError(PLUGIN_NAME, err);
-            }
+        var self = this;
+        var src = path.resolve(src);
+        var dest = path.resolve(dest);
 
-            var file = {
-                contents: contents.toString(),
-                data: data,
-                dest: dest
-            };
+        try {
+            var contents = fs.readFileSync(src, 'utf8');
+            var compiled = mustache.render(contents, data);
+            var file = new gutil.File({
+                path: dest,
+                contents: new Buffer(compiled)
+            });
 
-            eventEmitter.emit("loadedTemplate", file);
-        });
+            self.push(file);
+        } catch (err) {
+            throw new gutil.PluginError(PLUGIN_NAME, err);
+        }
     }
 
-    // Position sprites using Jake Gordon's bin packing algorithm 
+    // Position sprites using Jake Gordon's bin packing algorithm
     // https://github.com/jakesgordon/bin-packing
-    function packSprites(cb) {
+    function packSprites() {
         var packer = new GrowingPacker();
 
         // Get coordinates of sprites
         packer.fit(data.sprites);
 
-        // For each sprite 
+        // For each sprite
         for (var i in data.sprites) {
             var sprite = data.sprites[i],
                 // Create, initialise and populate an SVG
@@ -152,14 +150,10 @@ var spriteSVG = function(options) {
 
             // Add the SVG to the sprite sheet
             $sprite.append($svg);
-
         }
-
-        // Save the sprite sheet
-        saveSpriteSheet(cb);
     }
 
-    function positionSprites(cb) {
+    function positionSprites() {
         // For each sprite 
         for (var i in data.sprites) {
 
@@ -212,14 +206,10 @@ var spriteSVG = function(options) {
                 sprite.x = pxToRelative(sprite.x);
                 sprite.y = pxToRelative(sprite.y);
             }
-            
+
             // Add the SVG to the sprite sheet
             $sprite.append($svg);
-
         }
-
-        // Save the sprite sheet
-        saveSpriteSheet(cb);
     }
 
     function processSVG(file, encoding, cb) {
@@ -232,56 +222,55 @@ var spriteSVG = function(options) {
         if (file.isStream()) {
             return cb(new gutil.PluginError(PLUGIN_NAME, 'Streams are not supported'));
         }
+        console.log(file.path);
             // We're using the filename as the CSS class name
         var filename = path.basename(file.relative, path.extname(file.relative)),
             // Load the file contents
             $file = cheerio.load(file.contents.toString('utf8'), {xmlMode: true})('svg'),
-            viewBox = $file.attr('viewBox'),
-            coords = viewBox.split(" ");
+            viewBox = $file.attr('viewBox');
 
-        // Set sprite data to be used by the positioning function
-        var sprite = {
-                fileName: filename,
-                file: $file.contents(),
-                h: parseFloat(coords[3]),
-                padding: options.padding,
-                // Round up coordinates to avoid chopping off edges
-                viewBox: Math.ceil(coords[0])+" "+Math.ceil(coords[1])+" "+Math.ceil(coords[2])+" "+Math.ceil(coords[3]),
-                w: parseFloat(coords[2])
-            };
+        if (viewBox) {
+            var coords = viewBox.split(" ");
 
-        // Add the sprite to our array
-        data.sprites.push(sprite);
+            // Set sprite data to be used by the positioning function
+            var sprite = {
+                    fileName: filename,
+                    file: $file.contents(),
+                    h: parseFloat(coords[3]),
+                    padding: options.padding,
+                    // Round up coordinates to avoid chopping off edges
+                    viewBox: Math.ceil(coords[0])+" "+Math.ceil(coords[1])+" "+Math.ceil(coords[2])+" "+Math.ceil(coords[3]),
+                    w: parseFloat(coords[2])
+                };
+
+            // Add the sprite to our array
+            data.sprites.push(sprite);
+        } else {
+           gutil.log('Warning: svg "' + file.path + '" has no viewBox, not adding it to sprite');    
+        }
 
         // Move on to processSprites()
         cb();
     }
 
     function processSprites(cb) {
-        // Save this for referencing in positioning functions
-        self = this;
         // Sort the sprites so the biggest are first to avoid this issue:
         // https://github.com/jakesgordon/bin-packing/blob/master/js/packer.growing.js#L10
         data.sprites.sort(sort.maxside);
-
-        // Lay out the sprites 
+        // Lay out the sprites
         if(options.positioning==='packed') {
             packSprites(cb);
         } else {
             positionSprites(cb);
         }
+
+        // Save the sprite sheet
+        saveSpriteSheet.call(this, cb);
     }
 
-    // Render our template and then save the file
-    function renderTemplate(file) {
-        var compiled = mustache.render(file.contents, file.data);
-
-        fs.writeFile(file.dest, compiled);
-    }
-
-    // Final processing of sprite sheet then we return file to gulp pipe 
+    // Final processing of sprite sheet then we return file to gulp pipe
     function saveSpriteSheet(cb) {
-        // Add padding to even edges up 
+        // Add padding to even edges up
         data.height+=options.padding;
         data.width+=options.padding;
 
@@ -302,20 +291,23 @@ var spriteSVG = function(options) {
             data.height = pxToRelative(data.height);
             data.width = pxToRelative(data.width);
         }
-
-        // Save our CSS template file   
-        loadTemplate(options.templateSrc, options.templateDest);
+        // Save our CSS template file
+        loadTemplate.call(this, options.templateSrc, options.templateDest);
 
         // If a demo file is required, save that too
         if(options.demoDest) {
-            loadTemplate(options.demoSrc, options.demoDest);
+            loadTemplate.call(this, options.demoSrc, options.demoDest);
         }
 
         // Create a file to pipe back to gulp
-        var file = new gutil.File({path: './', contents: new Buffer($.xml())});
+        var file = new gutil.File({
+            path: path.resolve(options.svgDest),
+            contents: new Buffer($.xml())
+        });
 
         // Pipe it baby!
-        self.push(file);
+        this.push(file);
+        cb();
     }
 
     return through2.obj(processSVG, processSprites);
