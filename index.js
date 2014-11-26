@@ -316,6 +316,9 @@ var spriteSVG = function(options) {
 
         // Pipe it baby!
         self.push(file);
+
+        // Aaand we're done
+        cb();
     }
 
     return through2.obj(processSVG, processSprites);
