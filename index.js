@@ -22,7 +22,7 @@ var defaults = {
     pixelBase: 16, // Used to calculate em/rem values
     positioning: 'vertical', // vertical, horizontal, diagonal or packed
     templateSrc: '../template.tpl', // The source of the CSS template
-    templateDest: './sprite.scss', 
+    templateDest: './sprite.scss',
     units: 'px', // px, em or rem
     x: 0, // Starting X position
     y: 0 // Starting Y position
@@ -46,7 +46,7 @@ var sort = {
       for (n = 0 ; n < criteria.length ; n++) {
         diff = sort[criteria[n]](a,b);
         if (diff !== 0)
-          return diff;  
+          return diff;
       }
       return 0;
     }
@@ -55,7 +55,7 @@ var sort = {
 
 // This is where the magic happens
 var spriteSVG = function(options) {
-    
+
     options = options || {};
 
     // Extend our defaults with any passed options
@@ -64,7 +64,7 @@ var spriteSVG = function(options) {
     }
 
     // Create one SVG to rule them all, our sprite sheet
-    var $ = cheerio.load('<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg xmlns="http://www.w3.org/2000/svg" />', { xmlMode: true }),
+    var $ = cheerio.load('<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"/>', { xmlMode: true }),
         $sprite = $('svg'),
         // This data will be passed to our template
         data = {
@@ -104,7 +104,7 @@ var spriteSVG = function(options) {
         });
     }
 
-    // Position sprites using Jake Gordon's bin packing algorithm 
+    // Position sprites using Jake Gordon's bin packing algorithm
     // https://github.com/jakesgordon/bin-packing
     function packSprites(cb) {
         var packer = new GrowingPacker();
@@ -112,7 +112,7 @@ var spriteSVG = function(options) {
         // Get coordinates of sprites
         packer.fit(data.sprites);
 
-        // For each sprite 
+        // For each sprite
         for (var i in data.sprites) {
             var sprite = data.sprites[i],
                 // Create, initialise and populate an SVG
@@ -160,7 +160,7 @@ var spriteSVG = function(options) {
     }
 
     function positionSprites(cb) {
-        // For each sprite 
+        // For each sprite
         for (var i in data.sprites) {
 
             var sprite = data.sprites[i];
@@ -194,7 +194,7 @@ var spriteSVG = function(options) {
                 if(options.positioning!=='diagonal' && data.height<sprite.h+options.padding) {
                     data.height = sprite.h+options.padding;
                 }
-            } 
+            }
 
             if(options.positioning==='vertical' || options.positioning==='diagonal') {
                 y+=sprite.h+options.padding;
@@ -212,7 +212,7 @@ var spriteSVG = function(options) {
                 sprite.x = pxToRelative(sprite.x);
                 sprite.y = pxToRelative(sprite.y);
             }
-            
+
             // Add the SVG to the sprite sheet
             $sprite.append($svg);
 
@@ -264,7 +264,7 @@ var spriteSVG = function(options) {
         // https://github.com/jakesgordon/bin-packing/blob/master/js/packer.growing.js#L10
         data.sprites.sort(sort.maxside);
 
-        // Lay out the sprites 
+        // Lay out the sprites
         if(options.positioning==='packed') {
             packSprites(cb);
         } else {
@@ -279,9 +279,9 @@ var spriteSVG = function(options) {
         fs.writeFile(file.dest, compiled);
     }
 
-    // Final processing of sprite sheet then we return file to gulp pipe 
+    // Final processing of sprite sheet then we return file to gulp pipe
     function saveSpriteSheet(cb) {
-        // Add padding to even edges up 
+        // Add padding to even edges up
         data.height+=options.padding;
         data.width+=options.padding;
 
@@ -303,7 +303,7 @@ var spriteSVG = function(options) {
             data.width = pxToRelative(data.width);
         }
 
-        // Save our CSS template file   
+        // Save our CSS template file
         loadTemplate(options.templateSrc, options.templateDest);
 
         // If a demo file is required, save that too
