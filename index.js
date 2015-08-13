@@ -237,17 +237,19 @@ var spriteSVG = function(options) {
             // Load the file contents
             $file = cheerio.load(file.contents.toString('utf8'), {xmlMode: true})('svg'),
             viewBox = $file.attr('viewBox'),
-            coords = viewBox.split(" ");
+            coords = viewBox.split(" "),
+            width = $file.attr('width') || coords[2],
+            height = $file.attr('height') || coords[3];
 
         // Set sprite data to be used by the positioning function
         var sprite = {
                 fileName: filename,
                 file: $file.contents(),
-                h: parseFloat(coords[3]),
+                h: parseFloat(height),
                 padding: options.padding,
                 // Round up coordinates to avoid chopping off edges
                 viewBox: Math.ceil(coords[0])+" "+Math.ceil(coords[1])+" "+Math.ceil(coords[2])+" "+Math.ceil(coords[3]),
-                w: parseFloat(coords[2])
+                w: parseFloat(width)
             };
 
         // Add the sprite to our array
