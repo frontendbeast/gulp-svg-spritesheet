@@ -4,6 +4,7 @@ var cheerio = require('cheerio'),
     events = require('events'),
     fs = require('fs'),
     gutil = require('gulp-util'),
+    mkdirp = require('mkdirp'),
     mustache = require('mustache'),
     packetr = require('./lib/packer.growing'),
     path = require('path'),
@@ -275,8 +276,9 @@ var spriteSVG = function(options) {
     // Render our template and then save the file
     function renderTemplate(file) {
         var compiled = mustache.render(file.contents, file.data);
-
-        fs.writeFile(file.dest, compiled);
+        mkdirp(path.dirname(file.dest), function(){
+            fs.writeFile(file.dest, compiled);
+        });
     }
 
     // Final processing of sprite sheet then we return file to gulp pipe
