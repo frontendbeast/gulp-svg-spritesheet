@@ -1,7 +1,7 @@
 {
   "name": "gulp-svg-spritesheet",
   "description": "Gulp SVG sprite sheet generator",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Darren Hall <hello@darrenhall.info>",
   "license": "MIT",
 
