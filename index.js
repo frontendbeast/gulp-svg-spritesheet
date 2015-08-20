@@ -1,7 +1,6 @@
 'use strict';
 
 var cheerio = require('cheerio'),
-    events = require('events'),
     fs = require('fs'),
     gutil = require('gulp-util'),
     mkdirp = require('mkdirp'),
@@ -75,13 +74,9 @@ var spriteSVG = function(options) {
             units: options.units,
             width: 0
         },
-        eventEmitter = new events.EventEmitter(),
         self,
         x = options.x,
         y = options.y;
-
-    // When a template file is loaded, render it
-    eventEmitter.on("loadedTemplate", renderTemplate);
 
     // Generate relative em/rem untis from pixels
     function pxToRelative(value) {
@@ -89,7 +84,7 @@ var spriteSVG = function(options) {
     }
 
     // Load a template file and then render it
-    function loadTemplate(src, dest) {
+    function loadTemplate(src, dest, cb) {
         fs.readFile(src, function(err, contents) {
             if(err) {
                 new gutil.PluginError(PLUGIN_NAME, err);
@@ -101,7 +96,7 @@ var spriteSVG = function(options) {
                 dest: dest
             };
 
-            eventEmitter.emit("loadedTemplate", file);
+            renderTemplate(file, cb);
         });
     }
 
@@ -276,10 +271,10 @@ var spriteSVG = function(options) {
     }
 
     // Render our template and then save the file
-    function renderTemplate(file) {
+    function renderTemplate(file, cb) {
         var compiled = mustache.render(file.contents, file.data);
         mkdirp(path.dirname(file.dest), function(){
-            fs.writeFile(file.dest, compiled);
+            fs.writeFile(file.dest, compiled, cb);
         });
     }
 
@@ -307,22 +302,20 @@ var spriteSVG = function(options) {
             data.width = pxToRelative(data.width);
         }
 
-        // Save our CSS template file
-        loadTemplate(options.templateSrc, options.templateDest);
-
-        // If a demo file is required, save that too
-        if(options.demoDest) {
-            loadTemplate(options.demoSrc, options.demoDest);
-        }
-
         // Create a file to pipe back to gulp
         var file = new gutil.File({path: './', contents: new Buffer($.xml())});
 
         // Pipe it baby!
         self.push(file);
 
-        // Aaand we're done
-        cb();
+        // cb will be executed after css file will be rendered and created
+        // Save our CSS template file
+        loadTemplate(options.templateSrc, options.templateDest, cb);
+
+        // If a demo file is required, save that too
+        if(options.demoDest) {
+            loadTemplate(options.demoSrc, options.demoDest, cb);
+        }
     }
 
     return through2.obj(processSVG, processSprites);
