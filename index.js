@@ -25,7 +25,8 @@ var defaults = {
     templateDest: './sprite.scss',
     units: 'px', // px, em or rem
     x: 0, // Starting X position
-    y: 0 // Starting Y position
+    y: 0, // Starting Y position
+    templateData: {}
 };
 
 // Sorting functions from Jake Gordon's bin packing algorithm demo
@@ -67,18 +68,19 @@ var spriteSVG = function(options) {
     var $ = cheerio.load('<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"/>', { xmlMode: true }),
         $sprite = $('svg'),
         // This data will be passed to our template
-        data = {
-            cssPathSvg: options.cssPathSvg,
-            height: 0,
-            sprites: [],
-            units: options.units,
-            width: 0
-        },
+        data = options.templateData,
         eventEmitter = new events.EventEmitter(),
         self,
         x = options.x,
         y = options.y;
-
+    
+    // Copy values from the options into the templateData
+    data.cssPathSvg = options.cssPathSvg;
+    data.height = 0;
+    data.sprites = [];
+    data.units = options.units;
+    data.width = 0;
+    
     // When a template file is loaded, render it
     eventEmitter.on("loadedTemplate", renderTemplate);
 
