@@ -37,7 +37,10 @@ gulp.task('default', function () {
         positioning: 'diagonal',
         templateSrc: 'sass.tpl',
         templateDest: 'sass/sprite.scss',
-        units: 'em'
+        units: 'em',
+        templateData: {
+            cachebust: +(new Date())
+        }
     }))
     .pipe(svgmin())
     .pipe(gulp.dest('images/sprite.svg'))
@@ -126,6 +129,12 @@ Type: `integer`
 Default: `0` 
 
 Offset the starting X position on the sprite sheet.
+
+####templateData
+Type: `object`
+Default: `{}`
+
+Additional data that can be used in the mustache template file
 
 ##Disclaimer
 This is my first gulp plugin, so it might be complete rubbish. It's very alpha right now, and as such may not work. If you spot any bugs, or areas for improvement then feel free to go fork yourself and send me a pull request!
