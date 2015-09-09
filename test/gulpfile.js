@@ -10,7 +10,10 @@ gulp.task('default', function () {
         demoDest: './demo.html',
         padding: 0,
         positioning: 'packed',
-        units: 'em'
+        units: 'em',
+        templateData: {
+            cachebust: +(new Date())
+        }
     }))
     .pipe(svgmin())
     .pipe(gulp.dest('test.svg'));
