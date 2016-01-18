@@ -25,7 +25,8 @@ var defaults = {
     templateDest: './sprite.scss',
     units: 'px', // px, em or rem
     x: 0, // Starting X position
-    y: 0 // Starting Y position
+    y: 0, // Starting Y position
+    imgName: 'sprite.svg'
 };
 
 // Sorting functions from Jake Gordon's bin packing algorithm demo
@@ -72,7 +73,8 @@ var spriteSVG = function(options) {
             height: 0,
             sprites: [],
             units: options.units,
-            width: 0
+            width: 0,
+            imgName: options.imgName
         },
         self,
         x = options.x,
