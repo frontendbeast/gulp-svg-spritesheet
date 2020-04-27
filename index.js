@@ -278,8 +278,9 @@ var spriteSVG = function(options) {
     // Render our template and then save the file
     function renderTemplate(file) {
         var compiled = mustache.render(file.contents, file.data);
-        mkdirp(path.dirname(file.dest), function(){
-            fs.writeFile(file.dest, compiled);
+
+        mkdirp(path.dirname(file.dest)).then(() => {
+          fs.writeFile(file.dest, compiled);
         });
     }
 
