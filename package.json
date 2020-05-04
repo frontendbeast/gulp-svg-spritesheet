@@ -35,7 +35,7 @@
     "cheerio": "^0.17.0",
     "gulp-util": "^3.0.1",
     "mkdirp": "latest",
-    "mustache": "^0.8.2",
+    "mustache": "^3.1.0",
     "through2": "^0.6.3"
   }
 }
