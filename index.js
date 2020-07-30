@@ -280,7 +280,7 @@ var spriteSVG = function(options) {
         var compiled = mustache.render(file.contents, file.data);
 
         mkdirp(path.dirname(file.dest)).then(() => {
-          fs.writeFile(file.dest, compiled);
+          fs.writeFileSync(file.dest, compiled);
         });
     }
 
