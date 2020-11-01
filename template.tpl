@@ -2,7 +2,7 @@
  
 %sprite:before {
     content: ' ';
-    background-image: url("{{{cssPathSvg}}}");
+    background-image: url("{{{cssPathSvg}}}?cachebust={{cachebust}}");
     background-repeat: no-repeat;
     background-size: {{width}}{{units}} {{height}}{{units}};
     display: inline-block;
